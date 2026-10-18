@@ -1,9 +1,8 @@
-**revo snippets**
-
+# `revo snippets`
+### The tests for this project was made using AI Agents!
 snippets for [revo](https://revo.lung.fyi) in neovim, zed and vscode
 
-43 of them, taken from what revo's examples, benches and docs write over and over: `do … end` functions, matching on `{:ok, v}` and `{:err, e}`, tests, metatable classes, fibers, tcp servers, proc macros
-
+example:
 type `mres`, pick it from the menu, and you get
 
 ```revo
@@ -15,9 +14,9 @@ match expr
 with the cursor on `expr`. tab jumps to the next placeholder, and names that repeat (like the class name in `class`) change together. [snippets.md](snippets.md) has every snippet with what it expands to
 
 <p align="center">
-<a href="#install">install</a> |
-<a href="snippets.md">all snippets</a> |
-<a href="#adding-one">adding one</a>
+	<a href="#install">install</a> |
+	<a href="snippets.md">all snippets</a> |
+	<a href="#adding-one">adding one</a>
 </p>
 
 ### install
