@@ -6,7 +6,7 @@ Counts are matching lines: **rv** = `.rv` files, **docs** = markdown docs. Every
 
 Neither the LSP (`src/lang/workspace/completion.zig`) nor the VS Code extension (`PizzaLvr49/revo-lsp`) ships structural snippets. The LSP only fills in call arguments (`name(${1:p1})`).
 
-The finished snippet files are in `snippets/` (see `snippets/README.md`). Their bodies are the final versions. They differ slightly from the drafts below: more placeholders have runnable defaults, and prefixes that clash with stdlib names were renamed, e.g. `time` became `timeit`.
+The finished snippets are in [`snippets/revo.json`](snippets/revo.json). They differ slightly from the drafts below: more placeholders have runnable defaults, and prefixes that clash with stdlib names were renamed, e.g. `time` became `timeit`.
 
 Bodies use LSP/VS Code snippet syntax: `${1:default}` is a tab stop, a repeated number mirrors the same text, `$0` is the final cursor.
 

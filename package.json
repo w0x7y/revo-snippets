@@ -1,0 +1,10 @@
+{
+  "name": "revo-snippets",
+  "description": "Snippets for the Revo programming language",
+  "license": "MIT",
+  "contributes": {
+    "snippets": [
+      { "language": "revo", "path": "./snippets/revo.json" }
+    ]
+  }
+}

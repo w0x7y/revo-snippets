@@ -1,8 +1,0 @@
-{
-  "name": "revo-snippets",
-  "contributes": {
-    "snippets": [
-      { "language": "revo", "path": "./revo.json" }
-    ]
-  }
-}
