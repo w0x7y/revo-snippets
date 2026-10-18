@@ -1,0 +1,416 @@
+{
+  "Script header": {
+    "prefix": "hdr",
+    "description": "Shebang line plus a #! ... !# header comment",
+    "body": [
+      "#!/usr/bin/env revo",
+      " ${1:what this script does}",
+      "!#",
+      "$0"
+    ]
+  },
+  "Function": {
+    "prefix": "fn",
+    "description": "Multi-line function: fn name(...) do ... end",
+    "body": [
+      "fn ${1:name}(${2}) do",
+      "\t$0",
+      "end"
+    ]
+  },
+  "Anonymous function block": {
+    "prefix": "fna",
+    "description": "Anonymous fn with a do ... end body, for callbacks",
+    "body": [
+      "fn(${1:x}) do",
+      "\t$0",
+      "end"
+    ]
+  },
+  "Match a result": {
+    "prefix": "mres",
+    "description": "match on {:ok, v} and {:err, e}",
+    "body": [
+      "match ${1:expr}",
+      "\t| {:ok, ${2:v}} => ${3:v}",
+      "\t| {:err, ${4:e}} => ${5:e}"
+    ]
+  },
+  "Match": {
+    "prefix": "match",
+    "description": "match with a guarded arm and a wildcard arm",
+    "body": [
+      "match ${1:x}",
+      "\t| ${2:v} when ${3:cond} => ${4:v}",
+      "\t| _ => ${5::nil}"
+    ]
+  },
+  "Ok result": {
+    "prefix": "rok",
+    "description": "{:ok, value}",
+    "body": [
+      "{:ok, ${1:value}}"
+    ]
+  },
+  "Error result": {
+    "prefix": "rerr",
+    "description": "{:err, :ErrorName}",
+    "body": [
+      "{:err, :${1:Error}}"
+    ]
+  },
+  "Function returning a result": {
+    "prefix": "fnr",
+    "description": "Function that returns {:err, ...} early, else {:ok, ...}",
+    "body": [
+      "fn ${1:name}(${2}) do",
+      "\tif ${3:cond} return {:err, :${4:Error}}",
+      "\t{:ok, ${5:value}}",
+      "end"
+    ]
+  },
+  "For over a range": {
+    "prefix": "fori",
+    "description": "for i in start..end do ... end (end is exclusive)",
+    "body": [
+      "for ${1:i} in ${2:0}..${3:n} do",
+      "\t$0",
+      "end"
+    ]
+  },
+  "For over a collection": {
+    "prefix": "forin",
+    "description": "for x in a table, string or iterator",
+    "body": [
+      "for ${1:x} in ${2:items} do",
+      "\t$0",
+      "end"
+    ]
+  },
+  "If/else block": {
+    "prefix": "ife",
+    "description": "if cond do ... end else do ... end",
+    "body": [
+      "if ${1:cond} do",
+      "\t$2",
+      "end else do",
+      "\t$0",
+      "end"
+    ]
+  },
+  "Doc comment": {
+    "prefix": "doc",
+    "description": "One-line doc comment, shown in LSP hover and revo doc",
+    "body": [
+      "#* $0 *#"
+    ]
+  },
+  "Multi-line doc comment": {
+    "prefix": "docm",
+    "description": "Multi-line doc comment",
+    "body": [
+      "#*",
+      "$0",
+      "*#"
+    ]
+  },
+  "Test": {
+    "prefix": "test",
+    "description": "test block, runs with revo --test",
+    "body": [
+      "test \"${1:name}\" do",
+      "\texpect(${2:cond})?",
+      "end"
+    ]
+  },
+  "Test suite": {
+    "prefix": "suite",
+    "description": "suite that groups test blocks",
+    "body": [
+      "suite \"${1:name}\" do",
+      "\ttest \"${2:name}\" do",
+      "\t\t$0",
+      "\tend",
+      "end"
+    ]
+  },
+  "Expect equal": {
+    "prefix": "eq",
+    "description": "expect_eq(actual, expected)? inside a test",
+    "body": [
+      "expect_eq(${1:actual}, ${2:expected})?"
+    ]
+  },
+  "Class": {
+    "prefix": "class",
+    "description": "Class table with a .new constructor (set_meta + __index) and a method",
+    "body": [
+      "const ${1:Name} = { class = :${1} }",
+      "",
+      "fn ${1}.new(${2}) do",
+      "\tconst obj = { ${3} }",
+      "\tset_meta(obj, { __index = ${1} })",
+      "end",
+      "",
+      "fn ${1}:${4:method}() do",
+      "\t$0",
+      "end"
+    ]
+  },
+  "Typed table with a method": {
+    "prefix": "tobj",
+    "description": "Structural type, a method taking self of that type, and a table of that type",
+    "body": [
+      "type ${1:Counter} = { ${2:n}: ${3:number}, ${4:inc}: function }",
+      "",
+      "fn ${5:counter_inc}(self: ${1}) do",
+      "\t$0",
+      "end",
+      "",
+      "let ${6:c}: ${1} = { ${2} = ${7:0}, ${4} = ${5} }"
+    ]
+  },
+  "Method field": {
+    "prefix": "mfn",
+    "description": "Method field in a table literal: name = fn(self) ...,",
+    "body": [
+      "${1:name} = fn(self${2}) $0,"
+    ]
+  },
+  "__iter metamethod": {
+    "prefix": "iterm",
+    "description": "__iter metamethod that yields each item, then :done",
+    "body": [
+      "__iter = fn(self) do",
+      "\tlet i = -1",
+      "\tfn() do",
+      "\t\ti += 1",
+      "\t\tif i >= len(${1:self}) :done else ${1}[i]",
+      "\tend",
+      "end,"
+    ]
+  },
+  "Labeled block": {
+    "prefix": "blk",
+    "description": "Labeled do-block you can leave early with break/label(value)",
+    "body": [
+      "do/${1:b}",
+      "\tif ${2:cond} break/${1}(${3:value})",
+      "\t$0",
+      "end"
+    ]
+  },
+  "Labeled loop": {
+    "prefix": "loopl",
+    "description": "Labeled loop that returns a value through break/label(value)",
+    "body": [
+      "loop/${1:l} do",
+      "\t$0",
+      "\tif ${2:cond} break/${1}(${3:value})",
+      "end"
+    ]
+  },
+  "Tagged union type": {
+    "prefix": "union",
+    "description": "Union type made of tagged tables",
+    "body": [
+      "type ${1:Shape} =",
+      "\t  {:${2:circle}, ${3:number}}",
+      "\t| {:${4:point}}"
+    ]
+  },
+  "Destructure": {
+    "prefix": "des",
+    "description": "Destructure a table into bindings",
+    "body": [
+      "const {${1:a}, ${2:b}} = $0"
+    ]
+  },
+  "Import block": {
+    "prefix": "imp",
+    "description": "import block with a plain path and an aliased path",
+    "body": [
+      "import {",
+      "\t\"${1:module}\",",
+      "\t${2:alias} = \"${3:path}\",",
+      "}"
+    ]
+  },
+  "Spawn and join": {
+    "prefix": "spawnj",
+    "description": "Run a call in a fiber and wait for its result",
+    "body": [
+      "const ${1:h} = spawn ${2:worker}(${3})",
+      "join(${1})"
+    ]
+  },
+  "Spawn many and join all": {
+    "prefix": "jobs",
+    "description": "Spawn one fiber per item, then join them all",
+    "body": [
+      "let jobs = {}",
+      "for ${1:x} in ${2:items}",
+      "\tjobs:push(spawn ${3:worker}(${1}))",
+      "for job in jobs",
+      "\tjoin(job)"
+    ]
+  },
+  "TCP server": {
+    "prefix": "tcpserve",
+    "description": "Async TCP line server with one fiber per connection",
+    "body": [
+      "fn ${1:handle}(peer) do",
+      "\tloop do",
+      "\t\tmatch peer:recv({ mode = :read_line })",
+      "\t\t| {:ok, line} => peer:send(\"#{line}\\n\")?",
+      "\t\t| {:err, _} => do",
+      "\t\t\tpeer:close()?",
+      "\t\t\treturn :nil",
+      "\t\tend",
+      "\tend",
+      "end",
+      "",
+      "const server = net.listen(${2:8080})?",
+      "loop spawn ${1}(server:accept()?)"
+    ]
+  },
+  "TCP client": {
+    "prefix": "tcpconn",
+    "description": "Connect, send, read a reply, close",
+    "body": [
+      "const conn = net.connect(\"${1:127.0.0.1}\", ${2:8080})?",
+      "conn:send(${3:\"hello\"})?",
+      "const reply = conn:recv({ mode = :read_some })?",
+      "conn:close()?"
+    ]
+  },
+  "Read file": {
+    "prefix": "readf",
+    "description": "Read a whole file into a string",
+    "body": [
+      "const ${1:text} = fs.open(${2:\"file.txt\"})?:read()?"
+    ]
+  },
+  "Write file": {
+    "prefix": "writef",
+    "description": "Create or truncate a file and write to it",
+    "body": [
+      "const f = fs.open(${1:\"out.txt\"}, \"w\")?",
+      "f:write(${2:\"text\"})?",
+      "f:close()?"
+    ]
+  },
+  "Read stdin lines": {
+    "prefix": "stdin",
+    "description": "Loop over stdin line by line until EOF",
+    "body": [
+      "loop do",
+      "\tmatch input()",
+      "\t| {:ok, ${1:line}} => $0",
+      "\t| {:err, _} => break(:nil)",
+      "end"
+    ]
+  },
+  "Channel": {
+    "prefix": "chanp",
+    "description": "Channel with a producer fiber, a receive and a join",
+    "body": [
+      "const ${1:ch} = chan(${2})",
+      "const ${3:producer} = spawn (fn() send(${1}, ${4:value}))()",
+      "recv(${1})",
+      "join(${3})"
+    ]
+  },
+  "Map and collect": {
+    "prefix": "itmap",
+    "description": "xs |> iter.map(...) |> iter.collect()",
+    "body": [
+      "${1:xs} |> iter.map(fn(${2:x}) ${3:x}) |> iter.collect()"
+    ]
+  },
+  "Filter and collect": {
+    "prefix": "itfilter",
+    "description": "xs |> iter.filter(...) |> iter.collect()",
+    "body": [
+      "${1:xs} |> iter.filter(fn(${2:x}) ${3:cond}) |> iter.collect()"
+    ]
+  },
+  "Reduce": {
+    "prefix": "itreduce",
+    "description": "iter.reduce(xs, fn(acc, x) ..., initial)",
+    "body": [
+      "iter.reduce(${1:xs}, fn(acc, ${2:x}) ${3:acc + x}, ${4:0})"
+    ]
+  },
+  "Debug print": {
+    "prefix": "dbg",
+    "description": "Print a labeled value in debug format",
+    "body": [
+      "print(\"${1:x} = #{${1}:?}\")"
+    ]
+  },
+  "Time a block": {
+    "prefix": "timeit",
+    "description": "Measure how long some code takes, in ms",
+    "body": [
+      "const start = time.now()",
+      "$0",
+      "print(\"took #{time.now() - start}ms\")"
+    ]
+  },
+  "Proc macro": {
+    "prefix": "proc",
+    "description": "Proc macro that reads an AST node and returns {node}",
+    "body": [
+      "proc ${1:name}!(iter) do",
+      "\tlet ${2:a} = iter:next()",
+      "\t$0",
+      "\t{${2}}",
+      "end"
+    ]
+  },
+  "Variadic proc macro": {
+    "prefix": "procv",
+    "description": "Proc macro that folds all arguments with a binary operator",
+    "body": [
+      "proc ${1:name}!(iter) do",
+      "\tlet acc = iter:next()",
+      "\twhile iter:peek() != :nil do",
+      "\t\tacc = {:binary, :${2:add}, acc, iter:next()}",
+      "\tend",
+      "\t{acc}",
+      "end"
+    ]
+  },
+  "Native extension binding": {
+    "prefix": "ext",
+    "description": "Typed binding for a C/Zig extension loaded from a .so",
+    "body": [
+      "const ${1:ext}: {",
+      "\t#* ${2:doc} *#",
+      "\t${3:func}: fn(${4}) -> ${5:any},",
+      "} = import \"./${1}.so\"",
+      "${1}"
+    ]
+  },
+  "FFI function": {
+    "prefix": "ffifn",
+    "description": "Load a C library with ffi and bind one function",
+    "body": [
+      "let ${1:libc} = ffi.load(\"${2}\")",
+      "let ${3:strlen} = ffi.func(${1}, \"${4:strlen}\", :${5:u64}, {${6::string}})"
+    ]
+  },
+  "CLI arguments": {
+    "prefix": "cli",
+    "description": "argparse with a flag and a positional, printing usage on error",
+    "body": [
+      "const args = argparse.parse(fn(p) do",
+      "\tp:flag(:${1:verbose}, { short = \"${2:v}\", description = \"${3}\" })",
+      "\tp:positional(:${4:file}, { description = \"${5}\" })",
+      "end, argv)",
+      "if args.err panic(argparse.usage(args))",
+      "$0"
+    ]
+  }
+}
