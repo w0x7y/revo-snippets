@@ -18,7 +18,7 @@ every snippet, what it expands to, and where tab takes you. back to the [readme]
 | [tables and types](#tables-and-types) | [`class`](#class) [`tobj`](#tobj) [`mfn`](#mfn) [`iterm`](#iterm) [`union`](#union) |
 | [fibers and io](#fibers-and-io) | [`spawnj`](#spawnj) [`jobs`](#jobs) [`chanp`](#chanp) [`tcpserve`](#tcpserve) [`tcpconn`](#tcpconn) [`readf`](#readf) [`writef`](#writef) [`stdin`](#stdin) |
 | [pipelines and debugging](#pipelines-and-debugging) | [`itmap`](#itmap) [`itfilter`](#itfilter) [`itreduce`](#itreduce) [`dbg`](#dbg) [`timeit`](#timeit) |
-| [macros, native code and cli](#macros-native-code-and-cli) | [`proc`](#proc) [`procv`](#procv) [`ext`](#ext) [`ffifn`](#ffifn) [`cli`](#cli) |
+| [native code and cli](#native-code-and-cli) | [`ext`](#ext) [`ffifn`](#ffifn) [`cli`](#cli) |
 
 ---
 
@@ -144,18 +144,16 @@ const {a, b} =
 
 #### `imp`
 
-an import block with a plain module and a renamed one
+use a module by its path, and import one under a name you pick
 
 ```revo
-import {
-  "module",
-  alias = "path",
-}
+use("./module")
+const alias = import("path")
 ```
 
-**tab:** `module` → `alias` → `path`
+**tab:** `./module` → `alias` → `path`
 
-a plain import is named after the last part of its path, so `"./mod"` becomes `mod`
+`use` names the module after the last part of its path, so `"./mod"` becomes `mod`. when that part isn't a name, like `"./my-lib"`, import it under one instead
 
 ---
 
@@ -578,41 +576,7 @@ print("took #{time.now() - start}ms")
 
 ---
 
-### macros, native code and cli
-
-#### `proc`
-
-a proc macro
-
-```revo
-proc name!(iter) do
-  let a = iter:next()
-
-  {a}
-end
-```
-
-**tab:** `name` → `a` _(×2)_ → the macro body
-
-`iter:next()` gives you the next argument of the call as an AST node, before it runs. the macro must return a table holding one node, `{node}`. call it as `name!(...)`
-
-#### `procv`
-
-a proc macro that puts one operator between all its arguments
-
-```revo
-proc name!(iter) do
-  let acc = iter:next()
-  while iter:peek() != :nil do
-    acc = {:binary, :add, acc, iter:next()}
-  end
-  {acc}
-end
-```
-
-**tab:** `name` → `add`
-
-with `:add`, `name!(1, 2, 3)` turns into `1 + 2 + 3`. revo's examples also use `:mul` and `:div`
+### native code and cli
 
 #### `ext`
 
@@ -622,7 +586,7 @@ types for a native extension: a `.so` you built from c or zig
 const ext: {
   #* doc *#
   func: fn() -> any,
-} = import "./ext.so"
+} = revo.dload("./ext.so")
 ext
 ```
 

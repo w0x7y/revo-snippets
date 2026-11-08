@@ -226,14 +226,12 @@
       "const {${1:a}, ${2:b}} = $0"
     ]
   },
-  "Import block": {
+  "Use and import": {
     "prefix": "imp",
-    "description": "import block with a plain path and an aliased path",
+    "description": "use a module named after its path, and import one under a name you pick",
     "body": [
-      "import {",
-      "\t\"${1:module}\",",
-      "\t${2:alias} = \"${3:path}\",",
-      "}"
+      "use(\"${1:./module}\")",
+      "const ${2:alias} = import(\"${3:path}\")"
     ]
   },
   "Spawn and join": {
@@ -358,30 +356,6 @@
       "print(\"took #{time.now() - start}ms\")"
     ]
   },
-  "Proc macro": {
-    "prefix": "proc",
-    "description": "Proc macro that reads an AST node and returns {node}",
-    "body": [
-      "proc ${1:name}!(iter) do",
-      "\tlet ${2:a} = iter:next()",
-      "\t$0",
-      "\t{${2}}",
-      "end"
-    ]
-  },
-  "Variadic proc macro": {
-    "prefix": "procv",
-    "description": "Proc macro that folds all arguments with a binary operator",
-    "body": [
-      "proc ${1:name}!(iter) do",
-      "\tlet acc = iter:next()",
-      "\twhile iter:peek() != :nil do",
-      "\t\tacc = {:binary, :${2:add}, acc, iter:next()}",
-      "\tend",
-      "\t{acc}",
-      "end"
-    ]
-  },
   "Native extension binding": {
     "prefix": "ext",
     "description": "Typed binding for a C/Zig extension loaded from a .so",
@@ -389,7 +363,7 @@
       "const ${1:ext}: {",
       "\t#* ${2:doc} *#",
       "\t${3:func}: fn(${4}) -> ${5:any},",
-      "} = import \"./${1}.so\"",
+      "} = revo.dload(\"./${1}.so\")",
       "${1}"
     ]
   },

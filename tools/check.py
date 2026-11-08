@@ -71,8 +71,6 @@ CASES = {
     "itreduce": ("const xs = {1, 2}\nprint(", ")", {}, "run"),
     "dbg": ("const x = {a = 1}\n", "", {}, "run"),
     "timeit": ("", "", {}, "run"),
-    "proc": ("", "\nprint(name!(42))", {}, "run"),
-    "procv": ("", "\nprint(name!(1, 2, 3))", {}, "run"),
     "ext": ("", "", {}, "compile"),
     "ffifn": ("", '\nprint(strlen("hello"))', {}, "run"),
     "cli": ("", "", {0: "print(args.flags, args.positionals)"}, "args"),
