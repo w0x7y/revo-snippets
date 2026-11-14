@@ -239,7 +239,7 @@
     "description": "Run a call in a fiber and wait for its result",
     "body": [
       "const ${1:h} = spawn ${2:worker}(${3})",
-      "join(${1})"
+      "${1}:join()"
     ]
   },
   "Spawn many and join all": {
@@ -250,7 +250,7 @@
       "for ${1:x} in ${2:items}",
       "\tjobs:push(spawn ${3:worker}(${1}))",
       "for job in jobs",
-      "\tjoin(job)"
+      "\tjob:join()"
     ]
   },
   "TCP server": {
@@ -314,9 +314,9 @@
     "description": "Channel with a producer fiber, a receive and a join",
     "body": [
       "const ${1:ch} = chan(${2})",
-      "const ${3:producer} = spawn (fn() send(${1}, ${4:value}))()",
-      "recv(${1})",
-      "join(${3})"
+      "const ${3:producer} = spawn (fn() ${1}:send(${4:value}))()",
+      "${1}:recv()",
+      "${3}:join()"
     ]
   },
   "Map and collect": {

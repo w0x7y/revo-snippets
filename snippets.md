@@ -385,7 +385,7 @@ take a `Shape` apart with [`match`](#match): `| {:circle, r} => ...`
 
 ### fibers and io
 
-`spawn f(x)` runs a call in a new fiber and gives back a handle right away. `join(handle)` waits for it and returns what the call returned
+`spawn f(x)` runs a call in a new fiber and gives back a handle right away. `handle:join()` waits for it and returns what the call returned
 
 #### `spawnj`
 
@@ -393,7 +393,7 @@ run a call in a fiber, then wait for it
 
 ```revo
 const h = spawn worker()
-join(h)
+h:join()
 ```
 
 **tab:** `h` _(×2)_ → `worker` → arguments
@@ -407,12 +407,12 @@ let jobs = {}
 for x in items
   jobs:push(spawn worker(x))
 for job in jobs
-  join(job)
+  job:join()
 ```
 
 **tab:** `x` _(×2)_ → `items` → `worker`
 
-the results are thrown away. if you need them, keep what `join(job)` returns
+the results are thrown away. if you need them, keep what `job:join()` returns
 
 #### `chanp`
 
@@ -420,14 +420,14 @@ send a value from one fiber to another
 
 ```revo
 const ch = chan()
-const producer = spawn (fn() send(ch, value))()
-recv(ch)
-join(producer)
+const producer = spawn (fn() ch:send(value))()
+ch:recv()
+producer:join()
 ```
 
 **tab:** `ch` _(×3)_ → buffer size → `producer` _(×2)_ → `value`
 
-`chan()` has no buffer, so `send` waits until another fiber calls `recv`. `chan(2)` holds up to two values before `send` waits
+`chan()` has no buffer, so `ch:send(x)` waits until another fiber calls `ch:recv()`. `chan(2)` holds up to two values before `send` waits
 
 #### `tcpserve`
 
