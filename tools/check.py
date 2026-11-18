@@ -63,7 +63,7 @@ CASES = {
     "tcpserve": ("", "", {2: "18091"}, "serve"),
     "tcpconn": ("", "", {}, "compile"),
     "readf": ("", "\nprint(text)", {}, "run"),
-    "writef": ("", '\nprint(fs.open("out.txt")?:read()?)', {}, "run"),
+    "writef": ("", '\nprint(file.open("out.txt")?:read()?)', {}, "run"),
     "stdin": ("", "", {0: 'print("got", line)'}, "stdin"),
     "chanp": ("const value = 42\n", '\nprint("received")', {}, "run"),
     "itmap": ("const xs = {1, 2}\nprint(", ")", {}, "run"),

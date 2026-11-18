@@ -473,7 +473,7 @@ conn:close()?
 read a whole file into a string
 
 ```revo
-const text = fs.open("file.txt")?:read()?
+const text = file.open("file.txt")?:read()?
 ```
 
 **tab:** `text` → `"file.txt"`
@@ -485,7 +485,7 @@ opening and reading can both fail, so both get a `?`
 write a file
 
 ```revo
-const f = fs.open("out.txt", "w")?
+const f = file.open("out.txt", "w")?
 f:write("text")?
 f:close()?
 ```
@@ -565,14 +565,14 @@ print("x = #{x:?}")
 how long some code takes
 
 ```revo
-const start = time.now()
+const start = os.now()
 
-print("took #{time.now() - start}ms")
+print("took #{os.now() - start}ms")
 ```
 
 **tab:** the code to time
 
-`time.now()` is in milliseconds
+`os.now()` is in milliseconds
 
 ---
 
@@ -615,7 +615,7 @@ read command-line flags and arguments
 const args = argparse.parse(fn(p) do
   p:flag(:verbose, { short = "v", description = "" })
   p:positional(:file, { description = "" })
-end, argv)
+end, os.args())
 if args.err panic(argparse.usage(args))
 ```
 

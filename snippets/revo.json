@@ -286,14 +286,14 @@
     "prefix": "readf",
     "description": "Read a whole file into a string",
     "body": [
-      "const ${1:text} = fs.open(${2:\"file.txt\"})?:read()?"
+      "const ${1:text} = file.open(${2:\"file.txt\"})?:read()?"
     ]
   },
   "Write file": {
     "prefix": "writef",
     "description": "Create or truncate a file and write to it",
     "body": [
-      "const f = fs.open(${1:\"out.txt\"}, \"w\")?",
+      "const f = file.open(${1:\"out.txt\"}, \"w\")?",
       "f:write(${2:\"text\"})?",
       "f:close()?"
     ]
@@ -351,9 +351,9 @@
     "prefix": "timeit",
     "description": "Measure how long some code takes, in ms",
     "body": [
-      "const start = time.now()",
+      "const start = os.now()",
       "$0",
-      "print(\"took #{time.now() - start}ms\")"
+      "print(\"took #{os.now() - start}ms\")"
     ]
   },
   "Native extension binding": {
@@ -382,7 +382,7 @@
       "const args = argparse.parse(fn(p) do",
       "\tp:flag(:${1:verbose}, { short = \"${2:v}\", description = \"${3}\" })",
       "\tp:positional(:${4:file}, { description = \"${5}\" })",
-      "end, argv)",
+      "end, os.args())",
       "if args.err panic(argparse.usage(args))",
       "$0"
     ]
